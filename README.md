@@ -345,7 +345,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 - **Issues**: [GitHub Issues](https://github.com/srnetadmin/DomainGenCheck/issues)
 - **Discussions**: [GitHub Discussions](https://github.com/srnetadmin/DomainGenCheck/discussions)
-- **Security**: Report security issues privately to security@domain.com
+- **Security**: Report security vulnerabilities via [GitHub Security Advisories](https://github.com/srnetadmin/DomainGenCheck/security/advisories)
 
 ---
 
