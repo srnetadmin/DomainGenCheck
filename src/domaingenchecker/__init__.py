@@ -9,14 +9,14 @@ __version__ = "2.1.0"
 __author__ = "Greg Huff"
 __email__ = "srnetadmin@users.noreply.github.com"
 
-from .domain_generator import DomainGenerator
-from .dns_checker import DNSChecker
-from .output_handler import OutputHandler
 from .config import Config
+from .dns_checker import DNSChecker
+from .domain_generator import DomainGenerator
+from .output_handler import OutputHandler
 
 __all__ = [
     "DomainGenerator",
-    "DNSChecker", 
+    "DNSChecker",
     "OutputHandler",
     "Config",
 ]
