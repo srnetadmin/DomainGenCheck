@@ -1,0 +1,30 @@
+{
+  "generator": {
+    "max_variants_per_domain": 100,
+    "max_tld_length": 6,
+    "enable_keyboard_typos": true,
+    "enable_visual_similarity": true,
+    "enable_character_omission": true,
+    "enable_character_repetition": true,
+    "enable_character_substitution": false,
+    "enable_subdomain_variations": true,
+    "enable_idn_confusables": false
+  },
+  "dns": {
+    "timeout": 3.0,
+    "retries": 2,
+    "concurrent_limit": 200,
+    "rate_limit": 20.0,
+    "nameservers": ["8.8.8.8", "1.1.1.1"]
+  },
+  "output": {
+    "format": "json",
+    "include_unresolved": false,
+    "include_statistics": true,
+    "verbosity": 1,
+    "colorize": true
+  },
+  "log_level": "INFO",
+  "cache_results": true,
+  "cache_ttl": 7200
+}

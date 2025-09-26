@@ -1,0 +1,84 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "domaingenchecker"
+version = "2.0.0"
+description = "Advanced tool for generating and testing domain name variations to detect typosquatting and copycat sites"
+authors = [
+    {name = "Greg Huff", email = "srnetadmin@users.noreply.github.com"},
+]
+license = {text = "MIT"}
+readme = "README.md"
+requires-python = ">=3.8"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: System Administrators",
+    "Intended Audience :: Information Technology",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Security",
+    "Topic :: System :: Networking",
+    "Topic :: Utilities",
+]
+keywords = ["security", "dns", "typosquatting", "domain", "threat-intelligence"]
+dependencies = [
+    "aiohttp>=3.8.0",
+    "asyncio-throttle>=1.0.2",
+    "click>=8.0.0",
+    "colorama>=0.4.4",
+    "dnspython>=2.2.0",
+    "pydantic>=1.10.0",
+    "rich>=12.0.0",
+    "tldextract>=3.4.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "pytest-asyncio>=0.21.0",
+    "pytest-cov>=4.0.0",
+    "black>=22.0.0",
+    "isort>=5.10.0",
+    "flake8>=5.0.0",
+    "mypy>=1.0.0",
+    "pre-commit>=2.20.0",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/srnetadmin/DomainGenCheck"
+"Bug Reports" = "https://github.com/srnetadmin/DomainGenCheck/issues"
+"Source" = "https://github.com/srnetadmin/DomainGenCheck"
+
+[project.scripts]
+domaingen = "domaingenchecker.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.black]
+line-length = 88
+target-version = ['py38']
+
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+
+[tool.mypy]
+python_version = "3.8"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_functions = ["test_*"]
+addopts = ""

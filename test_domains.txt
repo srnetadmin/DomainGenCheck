@@ -1,0 +1,4 @@
+# Test domains for DomainGenChecker
+google.com
+github.com
+microsoft.com
