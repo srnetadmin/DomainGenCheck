@@ -7,16 +7,14 @@ import json
 import logging
 import time
 from collections import Counter, defaultdict
-from dataclasses import asdict
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List
 
 from rich import box
 from rich.console import Console
 from rich.panel import Panel
 from rich.progress import Progress, SpinnerColumn, TextColumn
 from rich.table import Table
-from rich.text import Text
 
 from .config import OutputConfig, OutputFormat
 from .dns_checker import DNSResult, DNSStatus

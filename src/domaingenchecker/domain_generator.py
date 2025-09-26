@@ -5,7 +5,7 @@ Advanced domain name variation generator for typosquatting detection.
 import logging
 import random
 import string
-from typing import Dict, Generator, List, Set
+from typing import Generator, List, Set
 from urllib.parse import urlparse
 
 import tldextract

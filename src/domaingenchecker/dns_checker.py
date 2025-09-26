@@ -7,7 +7,7 @@ import logging
 import time
 from dataclasses import dataclass
 from enum import Enum
-from typing import Dict, List, Optional, Set, Tuple
+from typing import Dict, List, Optional
 
 import dns.asyncresolver
 import dns.resolver
@@ -245,6 +245,7 @@ class DNSChecker:
             answers = await self.resolver.resolve(domain, "A")
             ip_addresses.extend([str(rdata) for rdata in answers])
         except (dns.resolver.NXDOMAIN, dns.resolver.NoAnswer, dns.resolver.Timeout):
+            # These are expected DNS resolution failures, continue to IPv6 attempt
             pass
         except Exception as e:
             logger.debug(f"Error resolving A record for {domain}: {e}")
@@ -255,6 +256,7 @@ class DNSChecker:
                 answers = await self.resolver.resolve(domain, "AAAA")
                 ip_addresses.extend([str(rdata) for rdata in answers])
             except (dns.resolver.NXDOMAIN, dns.resolver.NoAnswer, dns.resolver.Timeout):
+                # Expected DNS resolution failures for IPv6, no action needed
                 pass
             except Exception as e:
                 logger.debug(f"Error resolving AAAA record for {domain}: {e}")

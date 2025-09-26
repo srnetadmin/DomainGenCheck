@@ -2,8 +2,6 @@
 Tests for domain generator functionality.
 """
 
-import pytest
-
 from domaingenchecker.config import GeneratorConfig
 from domaingenchecker.domain_generator import DomainGenerator
 
