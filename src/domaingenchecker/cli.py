@@ -50,7 +50,62 @@ def load_tlds(tld_file: Path, max_length: int = 10) -> Set[str]:
     return tlds
 
 
-def load_domains(domains_file: Path) -> List[str]:
+def is_domain_name(input_str: str) -> bool:
+    """Check if input string is likely a domain name rather than a file path.
+    
+    Args:
+        input_str: Input string to check
+        
+    Returns:
+        True if appears to be a domain name, False if likely a file path
+    """
+    # Basic heuristics to detect domain vs file path
+    input_str = input_str.strip()
+    
+    # If it contains path separators or starts with ., likely a file
+    if '/' in input_str or '\\' in input_str or input_str.startswith('.'):
+        return False
+    
+    # If it has a file extension that's not a TLD, likely a file
+    if '.' in input_str:
+        parts = input_str.split('.')
+        if len(parts) >= 2:
+            last_part = parts[-1].lower()
+            # Common file extensions that aren't TLDs
+            file_extensions = {'txt', 'csv', 'json', 'log', 'conf', 'cfg', 'ini', 'yaml', 'yml'}
+            if last_part in file_extensions:
+                return False
+    
+    # If it looks like a domain (has dots, reasonable length, valid chars)
+    if '.' in input_str and len(input_str) <= 253 and len(input_str) >= 4:
+        # Check for valid domain characters
+        if all(c.isalnum() or c in '.-' for c in input_str):
+            return True
+    
+    return False
+
+
+def load_domains_from_input(input_source: str) -> List[str]:
+    """Load domains from either a single domain string or a file path.
+    
+    Args:
+        input_source: Either a domain name or file path
+        
+    Returns:
+        List of domains
+    """
+    # Check if input is a domain name or file path
+    if is_domain_name(input_source):
+        # It's a single domain
+        domain = input_source.strip().lower()
+        logger.info(f"Processing single domain: {domain}")
+        return [domain]
+    else:
+        # It's a file path
+        return load_domains_from_file(Path(input_source))
+
+
+def load_domains_from_file(domains_file: Path) -> List[str]:
     """Load domains from file.
     
     Args:
@@ -58,8 +113,16 @@ def load_domains(domains_file: Path) -> List[str]:
         
     Returns:
         List of domains
+        
+    Raises:
+        FileNotFoundError: If the file doesn't exist
+        Exception: For other file reading errors
     """
     domains = []
+    
+    if not domains_file.exists():
+        raise FileNotFoundError(f"Domains file not found: {domains_file}")
+    
     try:
         with open(domains_file, 'r', encoding='utf-8') as f:
             for line in f:
@@ -67,18 +130,14 @@ def load_domains(domains_file: Path) -> List[str]:
                 if domain and not domain.startswith('#'):
                     domains.append(domain)
         logger.info(f"Loaded {len(domains)} input domains from {domains_file}")
-    except FileNotFoundError:
-        console.print(f"[red]Error: Domains file not found: {domains_file}[/red]")
-        sys.exit(1)
     except Exception as e:
-        console.print(f"[red]Error loading domains file: {e}[/red]")
-        sys.exit(1)
+        raise Exception(f"Error reading domains file {domains_file}: {e}")
     
     return domains
 
 
 @click.command()
-@click.argument('domains_file', type=click.Path(exists=True, path_type=Path))
+@click.argument('input_source', type=str)
 @click.option('--tld-file', '-t', type=click.Path(exists=True, path_type=Path), 
               help='TLD file path (defaults to bundled TLDs)')
 @click.option('--max-variants', '-m', default=50, type=click.IntRange(1, 1000),
@@ -119,7 +178,7 @@ def load_domains(domains_file: Path) -> List[str]:
 @click.option('--enable-idn-confusables', is_flag=True, help='Enable IDN confusable attacks')
 @click.option('--version', is_flag=True, help='Show version and exit')
 def main(
-    domains_file: Path,
+    input_source: str,
     tld_file: Path,
     max_variants: int,
     max_tld_length: int,
@@ -151,7 +210,8 @@ def main(
     
     Generate and test domain name variations to detect typosquatting and copycat sites.
     
-    DOMAINS_FILE: Path to file containing domains to generate variations for (one per line).
+    INPUT_SOURCE: Either a single domain name (e.g., 'example.com') or path to a file 
+    containing domains (one per line). The tool automatically detects the input type.
     """
     
     # Show version and exit
@@ -214,7 +274,7 @@ def main(
     
     # Run the main application
     try:
-        asyncio.run(run_domain_check(app_config, domains_file, tld_file))
+        asyncio.run(run_domain_check(app_config, input_source, tld_file))
     except KeyboardInterrupt:
         console.print("\\n[yellow]Operation cancelled by user[/yellow]")
         sys.exit(1)
@@ -224,21 +284,28 @@ def main(
         sys.exit(1)
 
 
-async def run_domain_check(config: Config, domains_file: Path, tld_file: Path) -> None:
+async def run_domain_check(config: Config, input_source: str, tld_file: Path) -> None:
     """Run the main domain checking logic.
     
     Args:
         config: Application configuration
-        domains_file: Path to domains file
+        input_source: Either a single domain or path to domains file
         tld_file: Path to TLD file
     """
     # Initialize components
     output_handler = OutputHandler(config.output)
     
     # Load input data
-    input_domains = load_domains(domains_file)
-    if not input_domains:
-        output_handler.display_error("No valid domains found in input file")
+    try:
+        input_domains = load_domains_from_input(input_source)
+        if not input_domains:
+            output_handler.display_error("No valid domains found in input")
+            return
+    except FileNotFoundError:
+        output_handler.display_error(f"File not found: {input_source}")
+        return
+    except Exception as e:
+        output_handler.display_error(f"Error processing input: {e}")
         return
     
     valid_tlds = load_tlds(tld_file, config.generator.max_tld_length)
