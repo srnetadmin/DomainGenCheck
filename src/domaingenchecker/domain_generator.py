@@ -3,7 +3,7 @@ Advanced domain name variation generator for typosquatting detection.
 """
 
 import logging
-import random
+import secrets
 import string
 from typing import Generator, List, Set
 from urllib.parse import urlparse
@@ -243,12 +243,16 @@ class DomainGenerator:
             if tld in self.tlds and len(tld) <= self.config.max_tld_length:
                 relevant_tlds.append(tld)
 
-        # Add some random TLDs for diversity
+        # Add some random TLDs for diversity using cryptographically secure random
         available_tlds = [
             tld for tld in self.tlds if len(tld) <= self.config.max_tld_length
         ]
-        random_tlds = random.sample(available_tlds, min(10, len(available_tlds)))
-        relevant_tlds.extend(random_tlds)
+        # Use secrets.SystemRandom for cryptographically secure sampling
+        secure_random = secrets.SystemRandom()
+        sample_size = min(10, len(available_tlds))
+        if sample_size > 0:
+            random_tlds = secure_random.sample(available_tlds, sample_size)
+            relevant_tlds.extend(random_tlds)
 
         return list(set(relevant_tlds))  # Remove duplicates
 

@@ -38,7 +38,7 @@ class DNSResult:
     error_message: Optional[str] = None
     timestamp: float = 0.0
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         if self.timestamp == 0.0:
             self.timestamp = time.time()
 
@@ -110,7 +110,7 @@ class DNSChecker:
             logger.info(f"Using custom nameservers: {config.nameservers}")
 
         # Rate limiting
-        self.throttler = Throttler(rate_limit=config.rate_limit)
+        self.throttler = Throttler(rate_limit=int(config.rate_limit))
 
         logger.info(
             f"Initialized DNSChecker with {config.concurrent_limit} concurrent limit"
@@ -143,7 +143,7 @@ class DNSChecker:
         results = await asyncio.gather(*tasks, return_exceptions=True)
 
         # Process results and handle exceptions
-        dns_results = []
+        dns_results: List[DNSResult] = []
         for result in results:
             if isinstance(result, Exception):
                 logger.error(f"Unexpected error in DNS check: {result}")
@@ -157,7 +157,7 @@ class DNSChecker:
                         error_message=str(result),
                     )
                 )
-            else:
+            elif isinstance(result, DNSResult):
                 dns_results.append(result)
 
         logger.info(f"Completed DNS checks: {len(dns_results)} results")
@@ -297,7 +297,7 @@ class DNSChecker:
             "cache_size": self.cache.size(),
             "cache_ttl": self.cache.ttl,
             "concurrent_limit": self.config.concurrent_limit,
-            "timeout": self.config.timeout,
+            "timeout": int(self.config.timeout),
             "retries": self.config.retries,
         }
 

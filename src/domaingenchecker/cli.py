@@ -6,7 +6,7 @@ import asyncio
 import logging
 import sys
 from pathlib import Path
-from typing import List, Set
+from typing import List, Optional, Set
 
 import click
 from rich.console import Console
@@ -341,7 +341,7 @@ def main(
 
 
 async def run_domain_check(
-    config: Config, input_source: str, tld_file: Path, input_mode: str = None
+    config: Config, input_source: str, tld_file: Path, input_mode: Optional[str] = None
 ) -> None:
     """Run the main domain checking logic.
 

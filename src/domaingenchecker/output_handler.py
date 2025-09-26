@@ -98,7 +98,7 @@ class OutputHandler:
         timeout_domains = [r for r in self.results if r.status == DNSStatus.TIMEOUT]
 
         # TLD analysis
-        tld_distribution = defaultdict(int)
+        tld_distribution: Dict[str, int] = defaultdict(int)
         for result in self.results:
             if "." in result.domain:
                 tld = result.domain.split(".")[-1]
@@ -183,6 +183,8 @@ class OutputHandler:
 
     def _save_text_to_file(self) -> None:
         """Save text output to file."""
+        if self.config.output_file is None:
+            return
         with open(self.config.output_file, "w", encoding="utf-8") as f:
             f.write(
                 f"Domain Resolution Results - {time.strftime('%Y-%m-%d %H:%M:%S')}\\n"

@@ -47,7 +47,7 @@ class DNSConfig(BaseModel):
     use_doh: bool = Field(default=False, description="Use DNS over HTTPS")
 
     @validator("nameservers")
-    def validate_nameservers(cls, v):
+    def validate_nameservers(cls, v: Optional[List[str]]) -> Optional[List[str]]:
         if v is not None:
             # Basic IP validation - could be enhanced
             for ns in v:
@@ -92,7 +92,7 @@ class GeneratorConfig(BaseModel):
     custom_tlds: Optional[Set[str]] = Field(default=None, description="Custom TLD list")
 
     @validator("custom_tlds")
-    def validate_tlds(cls, v):
+    def validate_tlds(cls, v: Optional[Set[str]]) -> Optional[Set[str]]:
         if v is not None:
             # Ensure TLDs are lowercase and valid format
             return {tld.lower().strip(".") for tld in v if tld.strip()}
