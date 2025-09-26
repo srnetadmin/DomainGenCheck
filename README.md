@@ -1,5 +1,11 @@
 # DomainGenChecker v2.1
 
+[![CI/CD Pipeline](https://github.com/srnetadmin/DomainGenCheck/actions/workflows/ci.yml/badge.svg)](https://github.com/srnetadmin/DomainGenCheck/actions/workflows/ci.yml)
+[![CodeQL Analysis](https://github.com/srnetadmin/DomainGenCheck/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/srnetadmin/DomainGenCheck/actions/workflows/codeql-analysis.yml)
+[![Security Policy](https://img.shields.io/badge/security-policy-blue.svg)](SECURITY.md)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
+
 **Advanced domain variation generation and testing tool for typosquatting detection.**
 
 DomainGenChecker is a comprehensive Python tool that generates domain name variations using sophisticated typosquatting techniques and tests their DNS resolution status. It's designed for security professionals, threat intelligence analysts, and researchers to identify potentially malicious domain registrations.
@@ -33,6 +39,9 @@ DomainGenChecker is a comprehensive Python tool that generates domain name varia
 - **Error handling**: Graceful handling of DNS failures and timeouts
 - **Logging**: Comprehensive logging with configurable levels
 - **Configuration**: Flexible JSON-based configuration system
+- **Automated security scanning**: CodeQL analysis, dependency scanning, and vulnerability detection
+- **Secret scanning**: GitHub's advanced secret detection with push protection
+- **Security updates**: Automated Dependabot security patches
 
 ## 📦 Installation
 
