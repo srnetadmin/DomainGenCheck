@@ -1,4 +1,4 @@
-# DomainGenChecker v2.0
+# DomainGenChecker v2.1
 
 **Advanced domain variation generation and testing tool for typosquatting detection.**
 
@@ -50,44 +50,90 @@ cd DomainGenCheck-v2
 pip install -e ".[dev]"
 ```
 
+## 🔄 v2.1.0 CLI Changes
+
+### New Flag-First Interface
+
+v2.1.0 introduces a **flag-first CLI interface** for clearer, more explicit input handling:
+
+#### **Before (v2.0.x)**:
+```bash
+domaingen domains.txt                    # Auto-detected as file
+domaingen example.com --domain           # Required explicit flag
+```
+
+#### **After (v2.1.0)**:
+```bash
+domaingen --file domains.txt             # Explicit file input
+domaingen --domain example.com           # Explicit domain input
+```
+
+### Key Benefits
+- ✅ **Any file extension works**: `.domains`, `.list`, `.input`, `.txt` - all supported
+- ✅ **No ambiguity**: Clear, explicit input type specification
+- ✅ **Better UX**: Follows standard CLI patterns
+- ✅ **Enhanced validation**: Immediate error feedback
+
+### Migration Guide
+| **v2.0.x Command** | **v2.1.0 Equivalent** |
+|---------------------|------------------------|
+| `domaingen domains.txt` | `domaingen --file domains.txt` |
+| `domaingen example.com --domain` | `domaingen --domain example.com` |
+| `domaingen sites.list` | `domaingen --file sites.list` |
+
+**Note**: This is a breaking change. The new explicit flags are required in v2.1.0+.
+
 ## 🔧 Quick Start
 
 ### Basic Usage
 ```bash
-# Generate and test variations for domains in a file
-domaingen domains.txt
+# Single domain analysis
+domaingen --domain example.com
 
-# Specify custom output format
-domaingen domains.txt --format json --output results.json
+# Multiple domains from file
+domaingen --file domains.txt
 
-# Increase concurrent DNS queries for faster processing
-domaingen domains.txt --concurrent 200 --rate-limit 20
+# Custom output format with single domain
+domaingen --domain github.com --format json --output results.json
+
+# File input with enhanced performance
+domaingen --file domains.txt --concurrent 200 --rate-limit 20
 
 # Generate more variants per domain
-domaingen domains.txt --max-variants 100
+domaingen --domain google.com --max-variants 100
 ```
 
 ### Advanced Usage
 ```bash
 # Disable specific generation techniques
-domaingen domains.txt --disable-keyboard-typos --disable-subdomain-variations
+domaingen --file domains.txt --disable-keyboard-typos --disable-subdomain-variations
 
 # Enable IDN confusable attacks (use with caution)
-domaingen domains.txt --enable-idn-confusables
+domaingen --domain example.com --enable-idn-confusables
 
 # Use custom DNS servers
-domaingen domains.txt --nameservers 8.8.8.8 --nameservers 1.1.1.1
+domaingen --file domains.txt --nameservers ******* --nameservers *******
 
 # High verbosity with detailed error reporting
-domaingen domains.txt --verbosity 2 --log-level DEBUG
+domaingen --domain test.com --verbosity 2 --log-level DEBUG
+
+# Short flags for convenience
+domaingen -d example.com -f json --max-variants 50
+domaingen -f domains.txt --format csv --output results.csv
 ```
 
 ## 🛠️ Configuration
 
 ### Command Line Options
 
+#### Input Options
+| Option | Description | Required |
+|--------|-------------|----------|
+| `--domain, -d` | Single domain name to analyze | One of --domain or --file |
+| `--file, -f` | Path to file containing domains | One of --domain or --file |
+
+#### Processing Options
 | Option | Description | Default |
-|--------|-------------|---------|
 | `--max-variants` | Maximum variants per domain | 50 |
 | `--concurrent` | Concurrent DNS queries | 100 |
 | `--rate-limit` | DNS queries per second | 10.0 |
@@ -121,10 +167,18 @@ Create a JSON configuration file for persistent settings:
 }
 ```
 
-Use with: `domaingen domains.txt --config config.json`
+Use with: `domaingen --file domains.txt --config config.json`
 
-## 📝 Input Format
+## 📝 Input Methods
 
+### Single Domain Input
+```bash
+# Analyze a single domain
+domaingen --domain example.com
+domaingen -d github.com  # Short flag
+```
+
+### File Input
 Create a text file with domains to analyze (one per line):
 
 ```
@@ -136,6 +190,14 @@ example.org
 ```
 
 Comments (lines starting with #) are ignored.
+
+**Supported file extensions**: Any extension works with the `--file` flag:
+```bash
+domaingen --file domains.txt      # Standard .txt
+domaingen --file sites.list       # Custom .list
+domaingen --file corporate.domains # Custom .domains
+domaingen -f targets.input        # Any extension works!
+```
 
 ## 📊 Output Examples
 
@@ -212,7 +274,7 @@ Based on QWERTY keyboard layout proximity:
 ### Optimizing for Speed
 ```bash
 # Maximum performance (be respectful to DNS servers)
-domaingen domains.txt \\
+domaingen --file domains.txt \\
   --concurrent 500 \\
   --rate-limit 50 \\
   --timeout 2.0 \\
@@ -222,7 +284,7 @@ domaingen domains.txt \\
 ### Optimizing for Thoroughness
 ```bash
 # Maximum coverage
-domaingen domains.txt \\
+domaingen --domain example.com \\
   --max-variants 200 \\
   --enable-idn-confusables \\
   --timeout 10.0 \\
