@@ -166,7 +166,7 @@ def main(
     enable_idn_confusables: bool,
     version: bool
 ) -> None:
-    """DomainGenChecker v2.0 - Advanced domain variation generation and testing.
+    """DomainGenChecker v2.1 - Advanced domain variation generation and testing.
     
     Generate and test domain name variations to detect typosquatting and copycat sites.
     

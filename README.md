@@ -112,7 +112,7 @@ domaingen --file domains.txt --disable-keyboard-typos --disable-subdomain-variat
 domaingen --domain example.com --enable-idn-confusables
 
 # Use custom DNS servers
-domaingen --file domains.txt --nameservers ******* --nameservers *******
+domaingen --file domains.txt --nameservers 8.8.8.8 --nameservers 8.8.8.8
 
 # High verbosity with detailed error reporting
 domaingen --domain test.com --verbosity 2 --log-level DEBUG
@@ -227,7 +227,7 @@ Statistics:
   "metadata": {
     "timestamp": "2024-01-15 14:30:22",
     "total_domains": 150,
-    "format_version": "2.0"
+    "format_version": "2.1"
   },
   "statistics": {
     "resolution_rate": 31.3,

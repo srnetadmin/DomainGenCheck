@@ -199,7 +199,7 @@ class OutputHandler:
             'metadata': {
                 'timestamp': time.strftime('%Y-%m-%d %H:%M:%S'),
                 'total_domains': len(self.results),
-                'format_version': '2.0'
+                'format_version': '2.1'
             },
             'statistics': self.statistics if self.config.include_statistics else None,
             'results': [
@@ -342,7 +342,7 @@ class OutputHandler:
             generated_domains: Number of generated domain variations
         """
         header_text = f"""
-[bold cyan]DomainGenChecker v2.0[/bold cyan] - Advanced Typosquatting Detection
+[bold cyan]DomainGenChecker v2.1[/bold cyan] - Advanced Typosquatting Detection
         
 [bold]Input Configuration:[/bold]
 • Input domains: {input_domains:,}
