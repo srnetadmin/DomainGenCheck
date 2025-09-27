@@ -187,24 +187,24 @@ class OutputHandler:
             return
         with open(self.config.output_file, "w", encoding="utf-8") as f:
             f.write(
-                f"Domain Resolution Results - {time.strftime('%Y-%m-%d %H:%M:%S')}\\n"
+                f"Domain Resolution Results - {time.strftime('%Y-%m-%d %H:%M:%S')}\n"
             )
-            f.write("=" * 80 + "\\n\\n")
+            f.write("=" * 80 + "\n\n")
 
             for result in self._filter_results():
-                f.write(f"Domain: {result.domain}\\n")
-                f.write(f"Status: {result.status.value.title()}\\n")
+                f.write(f"Domain: {result.domain}\n")
+                f.write(f"Status: {result.status.value.title()}\n")
 
                 if result.ip_addresses:
-                    f.write(f"IP Addresses: {', '.join(result.ip_addresses)}\\n")
+                    f.write(f"IP Addresses: {', '.join(result.ip_addresses)}\n")
 
                 if result.response_time > 0:
-                    f.write(f"Response Time: {result.response_time:.3f}s\\n")
+                    f.write(f"Response Time: {result.response_time:.3f}s\n")
 
                 if result.error_message and self.config.verbosity >= 2:
-                    f.write(f"Error: {result.error_message}\\n")
+                    f.write(f"Error: {result.error_message}\n")
 
-                f.write("-" * 40 + "\\n")
+                f.write("-" * 40 + "\n")
 
         logger.info(f"Text output saved to {self.config.output_file}")
 
@@ -322,7 +322,7 @@ class OutputHandler:
                 stats_content.append(f"  .{tld}: {count:,}")
 
         panel = Panel(
-            "\\n".join(stats_content),
+            "\n".join(stats_content),
             title="[bold white]Statistics[/bold white]",
             border_style="blue",
             box=box.ROUNDED,
