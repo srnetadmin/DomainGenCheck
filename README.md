@@ -45,7 +45,47 @@ DomainGenChecker is a comprehensive Python tool that generates domain name varia
 
 ## 📦 Installation
 
-### From Source (Recommended)
+### Quick Install (Virtual Environment Recommended)
+
+Modern Python distributions (like Kali Linux, Ubuntu 23.04+, etc.) require virtual environments due to PEP 668 externally-managed environments.
+
+#### **Method 1: Using Python venv (Recommended)**
+```bash
+# Clone the repository
+git clone https://github.com/srnetadmin/DomainGenCheck.git
+cd DomainGenCheck-v2
+
+# Create and activate virtual environment
+python3 -m venv venv
+source venv/bin/activate  # On Linux/macOS
+# OR: venv\Scripts\activate  # On Windows
+
+# Install DomainGenChecker
+pip install -e .
+
+# Verify installation
+domaingen --help
+```
+
+#### **Method 2: Using pipx (Isolated Installation)**
+```bash
+# Install pipx if not already installed
+sudo apt install pipx  # On Debian/Ubuntu/Kali
+# OR: python3 -m pip install --user pipx
+
+# Clone and install
+git clone https://github.com/srnetadmin/DomainGenCheck.git
+cd DomainGenCheck-v2
+pipx install -e .
+
+# Verify installation
+domaingen --help
+```
+
+### Legacy Installation (System-wide)
+
+⚠️ **Note**: Only works on older Python distributions without externally-managed environments.
+
 ```bash
 git clone https://github.com/srnetadmin/DomainGenCheck.git
 cd DomainGenCheck-v2
@@ -53,10 +93,70 @@ pip install -e .
 ```
 
 ### Development Installation
+
+#### **With Virtual Environment (Recommended)**
 ```bash
 git clone https://github.com/srnetadmin/DomainGenCheck.git
 cd DomainGenCheck-v2
+
+# Create and activate virtual environment
+python3 -m venv venv
+source venv/bin/activate
+
+# Install with development dependencies
 pip install -e ".[dev]"
+
+# Install pre-commit hooks (optional)
+pre-commit install
+```
+
+### Running After Installation
+
+#### **With Virtual Environment**
+```bash
+# Activate the virtual environment first
+cd DomainGenCheck-v2
+source venv/bin/activate
+
+# Then run commands
+domaingen --domain example.com
+domaingen --file domains.txt
+```
+
+#### **With pipx**
+```bash
+# Direct usage (no activation needed)
+domaingen --domain example.com
+domaingen --file domains.txt
+```
+
+### Troubleshooting Installation
+
+> 📋 **For comprehensive installation instructions, troubleshooting, and OS-specific guidance, see [INSTALL.md](INSTALL.md)**
+
+#### **"externally-managed-environment" Error**
+If you see this error:
+```
+error: externally-managed-environment
+
+× This environment is externally managed
+```
+
+You're on a modern Python distribution. Use the virtual environment method:
+```bash
+python3 -m venv venv
+source venv/bin/activate
+pip install -e .
+```
+
+#### **Missing Dependencies**
+```bash
+# Install system dependencies (Ubuntu/Kali/Debian)
+sudo apt update
+sudo apt install python3-venv python3-pip git
+
+# For development
+sudo apt install python3-dev build-essential
 ```
 
 ## 🔄 v2.1.0 CLI Changes
@@ -93,6 +193,12 @@ domaingen --domain example.com           # Explicit domain input
 **Note**: This is a breaking change. The new explicit flags are required in v2.1.0+.
 
 ## 🔧 Quick Start
+
+> **📝 Note**: If you installed using a virtual environment, make sure to activate it first:
+> ```bash
+> cd DomainGenCheck-v2
+> source venv/bin/activate  # Activate virtual environment
+> ```
 
 ### Basic Usage
 ```bash
